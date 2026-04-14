@@ -20,5 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from dotenv import find_dotenv, load_dotenv
+
+
+def load_environment() -> bool:
+    """Load environment variables from a local .env file if present."""
+    dotenv_path = find_dotenv(filename=".env", usecwd=True)
+    if not dotenv_path:
+        return False
+
+    return load_dotenv(dotenv_path=dotenv_path, override=False)
+
+
 def do_something_useful():
     print("Replace this with a utility function")

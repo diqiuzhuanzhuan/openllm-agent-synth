@@ -9,6 +9,18 @@ A framework for generating datasets for agentic applications.
 * Free software: MIT License
 * Documentation: https://openllm-agent-synth.readthedocs.io.
 
+## Configuration
+
+Create a local `.env` file from [.env.example](./.env.example) and set the required API keys:
+
+```dotenv
+NVIDIA_API_KEY=
+OPENAI_API_KEY=
+OPENROUTER_API_KEY=
+```
+
+The CLI automatically loads environment variables from a `.env` file in the current working directory.
+
 ## Features
 
 * TODO

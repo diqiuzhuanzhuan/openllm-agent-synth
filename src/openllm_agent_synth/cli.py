@@ -27,6 +27,8 @@ from rich.console import Console
 
 from openllm_agent_synth import utils
 
+utils.load_environment()
+
 app = typer.Typer()
 console = Console()
 
