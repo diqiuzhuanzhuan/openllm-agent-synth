@@ -1,0 +1,51 @@
+dataset:
+  type: agent_trajectory
+  spec:
+    task_types:
+      - tool_calling
+      - code_execution
+      - general_task
+    task_domains:
+      tool_calling:
+        - calendar_management
+        - travel_planning
+        - crm_lookup
+        - support_triage
+        - research_lookup
+      code_execution:
+        - data_cleaning
+        - log_analysis
+        - unit_test_fix
+        - csv_transformation
+        - regex_extraction
+      general_task:
+        - summarization
+        - writing_assistance
+        - decision_support
+        - planning
+        - qa_answering
+    cli_tool_families:
+      - filesystem_inspection
+      - text_processing
+      - network_fetch
+      - python_runtime
+      - git_workflow
+      - package_management
+      - data_inspection
+
+model:
+  provider: openai
+  alias: gpt-5.4-mini
+  name: gpt-5.4-mini
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.7
+  top_p: 0.95
+  max_tokens: 1600
+  reasoning_effort: medium
+  skip_health_check: true
+
+run:
+  output_dir: artifacts
+  dataset_name: agent_trajectory
+  num_records: 100
+  preview_records: 10

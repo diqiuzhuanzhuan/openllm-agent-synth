@@ -20,6 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""Shared utility helpers."""
+
+from __future__ import annotations
+
 from dotenv import find_dotenv, load_dotenv
 
 
@@ -30,7 +34,3 @@ def load_environment() -> bool:
         return False
 
     return load_dotenv(dotenv_path=dotenv_path, override=False)
-
-
-def do_something_useful():
-    print("Replace this with a utility function")

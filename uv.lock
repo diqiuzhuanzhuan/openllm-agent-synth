@@ -1522,7 +1522,9 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "data-designer" },
+    { name = "pydantic" },
     { name = "python-dotenv" },
+    { name = "pyyaml" },
     { name = "rich" },
     { name = "typer" },
 ]
@@ -1541,8 +1543,10 @@ requires-dist = [
     { name = "coverage", marker = "extra == 'test'" },
     { name = "data-designer", specifier = ">=0.5.6" },
     { name = "ipdb", marker = "extra == 'test'" },
+    { name = "pydantic" },
     { name = "pytest", marker = "extra == 'test'" },
     { name = "python-dotenv" },
+    { name = "pyyaml" },
     { name = "rich" },
     { name = "ruff", marker = "extra == 'test'" },
     { name = "ty", marker = "extra == 'test'" },

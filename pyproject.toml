@@ -15,7 +15,9 @@ classifiers = [
 license = {text = "MIT"}
 dependencies = [
   "data-designer>=0.5.6",
+  "pydantic",
   "python-dotenv",
+  "PyYAML",
   "rich",
   "typer",
 ]

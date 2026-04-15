@@ -1,0 +1,145 @@
+model_configs:
+- alias: nvidia-text
+  model: nvidia/nemotron-3-nano-30b-a3b
+  inference_parameters:
+    generation_type: chat-completion
+    max_parallel_requests: 4
+    timeout: null
+    extra_body: null
+    temperature: 1.0
+    top_p: 1.0
+    max_tokens: null
+  provider: nvidia
+  skip_health_check: false
+- alias: nvidia-reasoning
+  model: openai/gpt-oss-20b
+  inference_parameters:
+    generation_type: chat-completion
+    max_parallel_requests: 4
+    timeout: null
+    extra_body: null
+    temperature: 0.35
+    top_p: 0.95
+    max_tokens: null
+  provider: nvidia
+  skip_health_check: false
+- alias: nvidia-vision
+  model: nvidia/nemotron-nano-12b-v2-vl
+  inference_parameters:
+    generation_type: chat-completion
+    max_parallel_requests: 4
+    timeout: null
+    extra_body: null
+    temperature: 0.85
+    top_p: 0.95
+    max_tokens: null
+  provider: nvidia
+  skip_health_check: false
+- alias: nvidia-embedding
+  model: nvidia/llama-3.2-nv-embedqa-1b-v2
+  inference_parameters:
+    generation_type: embedding
+    max_parallel_requests: 4
+    timeout: null
+    extra_body:
+      input_type: query
+    encoding_format: float
+    dimensions: null
+  provider: nvidia
+  skip_health_check: false
+- alias: openai-text
+  model: gpt-4.1
+  inference_parameters:
+    generation_type: chat-completion
+    max_parallel_requests: 4
+    timeout: null
+    extra_body: null
+    temperature: 0.85
+    top_p: 0.95
+    max_tokens: null
+  provider: openai
+  skip_health_check: false
+- alias: openai-reasoning
+  model: gpt-5
+  inference_parameters:
+    generation_type: chat-completion
+    max_parallel_requests: 4
+    timeout: null
+    extra_body:
+      reasoning_effort: medium
+    temperature: null
+    top_p: null
+    max_tokens: null
+  provider: openai
+  skip_health_check: false
+- alias: openai-vision
+  model: gpt-5
+  inference_parameters:
+    generation_type: chat-completion
+    max_parallel_requests: 4
+    timeout: null
+    extra_body:
+      reasoning_effort: medium
+    temperature: null
+    top_p: null
+    max_tokens: null
+  provider: openai
+  skip_health_check: false
+- alias: openai-embedding
+  model: text-embedding-3-large
+  inference_parameters:
+    generation_type: embedding
+    max_parallel_requests: 4
+    timeout: null
+    extra_body: null
+    encoding_format: float
+    dimensions: null
+  provider: openai
+  skip_health_check: false
+- alias: openrouter-text
+  model: nvidia/nemotron-3-nano-30b-a3b
+  inference_parameters:
+    generation_type: chat-completion
+    max_parallel_requests: 4
+    timeout: null
+    extra_body: null
+    temperature: 1.0
+    top_p: 1.0
+    max_tokens: null
+  provider: openrouter
+  skip_health_check: false
+- alias: openrouter-reasoning
+  model: openai/gpt-oss-20b
+  inference_parameters:
+    generation_type: chat-completion
+    max_parallel_requests: 4
+    timeout: null
+    extra_body: null
+    temperature: 0.35
+    top_p: 0.95
+    max_tokens: null
+  provider: openrouter
+  skip_health_check: false
+- alias: openrouter-vision
+  model: nvidia/nemotron-nano-12b-v2-vl
+  inference_parameters:
+    generation_type: chat-completion
+    max_parallel_requests: 4
+    timeout: null
+    extra_body: null
+    temperature: 0.85
+    top_p: 0.95
+    max_tokens: null
+  provider: openrouter
+  skip_health_check: false
+- alias: openrouter-embedding
+  model: openai/text-embedding-3-large
+  inference_parameters:
+    generation_type: embedding
+    max_parallel_requests: 4
+    timeout: null
+    extra_body: null
+    encoding_format: float
+    dimensions: null
+  provider: openrouter
+  skip_health_check: false
