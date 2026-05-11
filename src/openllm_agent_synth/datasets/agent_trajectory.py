@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Loong Ma
+
 """Built-in dataset implementation for agent trajectory synthesis."""
 
 from __future__ import annotations
@@ -12,13 +15,19 @@ from openllm_agent_synth.config.models import AgentTrajectorySpec, ModelSettings
 from .base import BuiltinDatasetBuilder
 
 DEFAULT_CLI_TOOL_CATALOGS = {
-    "filesystem_inspection": "ls, find, rg, tree, stat, pwd, head, tail",
+    "filesystem_inspection": "ls, find, grep, rg, fd, tree, stat, pwd, glob(*.txt), glob(**/*.py), head, tail",
+    "file_operations": "cp, mv, rm, mkdir, touch, ln, rsync, install, chmod, chown",
     "text_processing": "cat, sed, awk, cut, sort, uniq, tr, xargs",
     "network_fetch": "curl, wget, jq, httpie, openssl, nslookup, dig",
     "python_runtime": "python, uv, pytest, pip, ipython, python -m json.tool",
     "git_workflow": "git status, git diff, git log, git show, git branch, git checkout",
     "package_management": "uv, pip, npm, npx, cargo, make, docker",
     "data_inspection": "ls, rg, cat, python, jq, git, curl",
+    "shell_automation": "bash, sh, env, export, chmod, xargs, make, just",
+    "system_observability": "ps, top, lsof, df, du, free, uname, which",
+    "archive_processing": "tar, unzip, zip, gunzip, gzip, zstd, file",
+    "json_yaml_processing": "jq, yq, python -m json.tool, dasel, shyaml, gron",
+    "sqlite_inspection": "sqlite3, duckdb, csvsql, python, jq, rg",
 }
 
 

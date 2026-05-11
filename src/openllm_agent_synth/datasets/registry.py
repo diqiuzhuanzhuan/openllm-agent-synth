@@ -1,12 +1,17 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Loong Ma
+
 """Registry for built-in dataset builders."""
 
 from __future__ import annotations
 
 from .agent_trajectory import AgentTrajectoryDatasetBuilder
 from .base import BuiltinDatasetBuilder, DatasetBuilderError
+from .skill_query import SkillQueryDatasetBuilder
 
 _DATASET_BUILDERS: dict[str, BuiltinDatasetBuilder] = {
     AgentTrajectoryDatasetBuilder.dataset_type: AgentTrajectoryDatasetBuilder(),
+    SkillQueryDatasetBuilder.dataset_type: SkillQueryDatasetBuilder(),
 }
 
 

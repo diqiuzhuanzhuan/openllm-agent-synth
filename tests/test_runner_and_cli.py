@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Loong Ma
+
 """Tests for runner integration and CLI command behavior."""
 
 from __future__ import annotations

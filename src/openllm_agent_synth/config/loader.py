@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Loong Ma
+
 """Load YAML configuration files into validated application models."""
 
 from __future__ import annotations

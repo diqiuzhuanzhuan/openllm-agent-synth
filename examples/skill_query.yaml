@@ -1,0 +1,35 @@
+dataset:
+  type: skill_query
+  spec:
+    skill_roots:
+      - ~/.hermes/skills
+    queries_per_skill: 12
+    query_types:
+      - direct
+      - goal_oriented
+      - discovery
+      - ambiguous
+    difficulty_levels:
+      - easy
+      - medium
+      - hard
+    include_negative_samples: true
+    negatives_per_query: 2
+    max_skill_content_chars: 6000
+
+model:
+  provider: openai
+  alias: gpt-5.4-mini
+  name: gpt-5.4-mini
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.7
+  top_p: 0.95
+  max_tokens: 1200
+  reasoning_effort: medium
+  skip_health_check: true
+
+run:
+  output_dir: artifacts
+  dataset_name: skill_query
+  num_records: 240
+  preview_records: 12

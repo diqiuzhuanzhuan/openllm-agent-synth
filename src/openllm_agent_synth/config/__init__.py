@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Loong Ma
+
 """Configuration loading and schema models."""
 
 from .loader import ConfigError, load_app_config

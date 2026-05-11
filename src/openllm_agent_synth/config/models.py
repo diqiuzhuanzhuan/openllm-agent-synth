@@ -1,10 +1,13 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Loong Ma
+
 """Pydantic models for YAML-driven application configuration."""
 
 from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 DEFAULT_TASK_DOMAINS = {
     "tool_calling": [
@@ -32,12 +35,18 @@ DEFAULT_TASK_DOMAINS = {
 
 DEFAULT_CLI_TOOL_FAMILIES = [
     "filesystem_inspection",
+    "file_operations",
     "text_processing",
     "network_fetch",
     "python_runtime",
     "git_workflow",
     "package_management",
     "data_inspection",
+    "shell_automation",
+    "system_observability",
+    "archive_processing",
+    "json_yaml_processing",
+    "sqlite_inspection",
 ]
 
 
@@ -62,6 +71,38 @@ class AgentTrajectorySpec(StrictModel):
     cli_tool_family_weights: list[float] | None = None
     difficulty_weights: list[float] | None = None
     step_budget_weights: list[float] | None = None
+
+
+class SkillQuerySpec(StrictModel):
+    """Dataset-specific configuration for skill routing query synthesis."""
+
+    skill_dirs: list[str] = Field(default_factory=list)
+    skill_roots: list[str] = Field(default_factory=list)
+    queries_per_skill: int = Field(default=12, ge=1)
+    query_types: list[str] = Field(
+        default_factory=lambda: ["direct", "goal_oriented", "discovery", "ambiguous"],
+        min_length=1,
+    )
+    difficulty_levels: list[str] = Field(default_factory=lambda: ["easy", "medium", "hard"], min_length=1)
+    include_negative_samples: bool = True
+    negatives_per_query: int = Field(default=2, ge=0)
+    max_skill_content_chars: int = Field(default=6000, ge=500)
+
+    @model_validator(mode="after")
+    def validate_skill_inputs(self) -> SkillQuerySpec:
+        """Require at least one skill source and reject unsupported query types."""
+
+        if not self.skill_dirs and not self.skill_roots:
+            raise ValueError("skill_query requires at least one entry in `skill_dirs` or `skill_roots`.")
+
+        allowed_types = {"direct", "goal_oriented", "discovery", "ambiguous"}
+        unknown_types = sorted(set(self.query_types) - allowed_types)
+        if unknown_types:
+            allowed = ", ".join(sorted(allowed_types))
+            unknown = ", ".join(unknown_types)
+            raise ValueError(f"Unsupported query_types: {unknown}. Allowed values: {allowed}")
+
+        return self
 
 
 class DatasetConfig(StrictModel):

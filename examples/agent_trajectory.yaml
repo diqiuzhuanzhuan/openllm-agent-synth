@@ -26,12 +26,18 @@ dataset:
         - qa_answering
     cli_tool_families:
       - filesystem_inspection
+      - file_operations
       - text_processing
       - network_fetch
       - python_runtime
       - git_workflow
       - package_management
       - data_inspection
+      - shell_automation
+      - system_observability
+      - archive_processing
+      - json_yaml_processing
+      - sqlite_inspection
 
 model:
   provider: openai

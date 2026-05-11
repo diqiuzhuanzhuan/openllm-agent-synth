@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Loong Ma
+
 """Tests for config loading, registry lookup, and builder assembly."""
 
 from __future__ import annotations
@@ -5,6 +8,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+from data_designer.config.seed_source_dataframe import DataFrameSeedSource
 
 from openllm_agent_synth.config.loader import ConfigError, load_app_config
 from openllm_agent_synth.datasets.base import DatasetBuilderError
@@ -33,6 +37,38 @@ run:
   preview_records: 10
 """
 
+SKILL_QUERY_CONFIG_TEMPLATE = """
+dataset:
+  type: skill_query
+  spec:
+    skill_roots:
+      - {skill_root}
+    queries_per_skill: 4
+    query_types:
+      - direct
+      - goal_oriented
+    difficulty_levels:
+      - easy
+      - hard
+    include_negative_samples: true
+    negatives_per_query: 1
+model:
+  provider: openai
+  alias: gpt-5.4-mini
+  name: gpt-5.4-mini
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.7
+  top_p: 0.95
+  max_tokens: 1200
+  reasoning_effort: medium
+  skip_health_check: true
+run:
+  output_dir: artifacts
+  dataset_name: skill_query
+  num_records: 8
+  preview_records: 4
+"""
+
 
 def write_config(tmp_path: Path, content: str = VALID_CONFIG) -> Path:
     """Write a YAML config into the temp directory."""
@@ -40,6 +76,26 @@ def write_config(tmp_path: Path, content: str = VALID_CONFIG) -> Path:
     path = tmp_path / "config.yaml"
     path.write_text(content, encoding="utf-8")
     return path
+
+
+def write_skill(tmp_path: Path, name: str, description: str, body: str) -> Path:
+    """Create a minimal skill directory containing SKILL.md."""
+
+    skill_dir = tmp_path / name
+    skill_dir.mkdir(parents=True, exist_ok=True)
+    (skill_dir / "SKILL.md").write_text(
+        f"""---
+name: {name}
+description: {description}
+---
+
+# {name}
+
+{body}
+""",
+        encoding="utf-8",
+    )
+    return skill_dir
 
 
 def test_load_environment_loads_dotenv(tmp_path, monkeypatch):
@@ -101,6 +157,14 @@ def test_dataset_registry_returns_agent_trajectory_builder():
     assert builder.dataset_type == "agent_trajectory"
 
 
+def test_dataset_registry_returns_skill_query_builder():
+    """Resolve the built-in skill query dataset implementation."""
+
+    builder = get_dataset_builder("skill_query")
+
+    assert builder.dataset_type == "skill_query"
+
+
 def test_dataset_registry_rejects_unknown_dataset():
     """Reject unsupported dataset types with a clear error."""
 
@@ -144,3 +208,42 @@ def test_build_app_context_requires_api_key_env(tmp_path, monkeypatch):
 
     with pytest.raises(DatasetBuilderError, match="OPENAI_API_KEY"):
         build_app_context(app_config, config_path=config_path)
+
+
+def test_build_app_context_assembles_skill_query_seed_data(tmp_path, monkeypatch):
+    """Build skill-query config with scanned skills and seeded routing rows."""
+
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    skill_root = tmp_path / "skills"
+    write_skill(
+        skill_root,
+        "slack-digest",
+        "Summarize Slack activity into a concise update.",
+        "Use when the user wants a Slack recap.\n\nDo not use this skill for GitHub review triage.",
+    )
+    write_skill(
+        skill_root,
+        "github-review",
+        "Address GitHub pull request review comments.",
+        "Use when the user needs PR review feedback handled.\n\nAvoid using this skill for Slack channel digests.",
+    )
+    config_path = write_config(
+        tmp_path,
+        SKILL_QUERY_CONFIG_TEMPLATE.format(skill_root=skill_root.as_posix()),
+    )
+    app_config = load_app_config(config_path)
+
+    context = build_app_context(app_config, config_path=config_path)
+    column_names = {column.name for column in context.builder.get_column_configs()}
+    seed_config = context.builder.get_seed_config()
+
+    assert seed_config is not None
+    assert isinstance(seed_config.source, DataFrameSeedSource)
+
+    seed_rows = seed_config.source.df.to_dict(orient="records")
+
+    assert context.dataset_builder_name == "skill_query"
+    assert {"query", "routing_rationale", "evidence_summary"} <= column_names
+    assert len(seed_rows) == 8
+    assert seed_rows[0]["target_skill"] in {"slack-digest", "github-review"}
+    assert seed_rows[0]["hard_negative_skills_json"] != "[]"

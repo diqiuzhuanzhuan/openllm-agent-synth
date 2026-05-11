@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Loong Ma
+
 """Execution helpers that run validate, preview, and generate actions."""
 
 from __future__ import annotations

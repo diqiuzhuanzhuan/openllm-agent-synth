@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Loong Ma
+
 """Build runtime objects from validated application configuration."""
 
 from __future__ import annotations

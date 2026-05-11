@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Loong Ma
+
 """Service layer for building and running datasets."""
 
 from .builder_service import AppBuildContext, build_app_context
